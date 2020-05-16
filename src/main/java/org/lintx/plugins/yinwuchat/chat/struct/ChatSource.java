@@ -1,6 +1,6 @@
 package org.lintx.plugins.yinwuchat.chat.struct;
 
-public enum  ChatSource {
+public enum ChatSource {
     GAME,
     WEB,
     QQ

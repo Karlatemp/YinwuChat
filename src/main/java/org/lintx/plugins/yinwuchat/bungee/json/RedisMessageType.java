@@ -1,6 +1,6 @@
 package org.lintx.plugins.yinwuchat.bungee.json;
 
-public enum  RedisMessageType {
+public enum RedisMessageType {
     UNKNOWN,
     PUBLIC_MESSAGE,
     PRIVATE_MESSAGE,

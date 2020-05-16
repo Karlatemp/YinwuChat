@@ -11,58 +11,57 @@ import org.lintx.plugins.yinwuchat.bungee.json.OutputServerMessage;
 import java.util.*;
 
 /**
- *
  * @author LinTx
  */
 public class WsClientHelper {
     private static final HashMap<Channel, WsClientUtil> clients = new HashMap<>();
     private static Channel coolQ = null;
 
-    public static void updateCoolQ(Channel socket){
-        if (coolQ!=null){
+    public static void updateCoolQ(Channel socket) {
+        if (coolQ != null) {
             try {
                 coolQ.close();
-            }catch (Exception ignored){
+            } catch (Exception ignored) {
 
             }
         }
         coolQ = socket;
     }
 
-    public static Channel getCoolQ(){
+    public static Channel getCoolQ() {
         return coolQ;
     }
-    
-    public static void add(Channel channel, WsClientUtil client){
+
+    public static void add(Channel channel, WsClientUtil client) {
         remove(channel);
         clients.put(channel, client);
     }
 
-    public static Set<Channel> channels(){
+    public static Set<Channel> channels() {
         return clients.keySet();
     }
 
-    public static Collection<WsClientUtil> utils(){
+    public static Collection<WsClientUtil> utils() {
         return clients.values();
     }
-    
-    static void remove(Channel channel){
+
+    static void remove(Channel channel) {
         clients.remove(channel);
     }
-    
-    public static WsClientUtil get(Channel channel){
+
+    public static WsClientUtil get(Channel channel) {
         WsClientUtil client = null;
         if (clients.containsKey(channel)) {
             client = clients.get(channel);
         }
         return client;
     }
-    
-    public static void clear(){
+
+    public static void clear() {
         clients.clear();
     }
-    
-    public static Channel getWebSocket(String token){
+
+    public static Channel getWebSocket(String token) {
         for (Map.Entry<Channel, WsClientUtil> entry : clients.entrySet()) {
             Channel key = entry.getKey();
             WsClientUtil value = entry.getValue();
@@ -73,7 +72,7 @@ public class WsClientHelper {
         return null;
     }
 
-    public static Channel getWebSocketAsUtil(WsClientUtil util){
+    public static Channel getWebSocketAsUtil(WsClientUtil util) {
         for (Map.Entry<Channel, WsClientUtil> entry : clients.entrySet()) {
             Channel key = entry.getKey();
             WsClientUtil value = entry.getValue();
@@ -83,20 +82,20 @@ public class WsClientHelper {
         }
         return null;
     }
-    
-    private static List<Channel> getChannels(UUID uuid){
+
+    private static List<Channel> getChannels(UUID uuid) {
         List<Channel> list = new ArrayList<>();
         for (Map.Entry<Channel, WsClientUtil> entry : clients.entrySet()) {
             Channel key = entry.getKey();
             WsClientUtil value = entry.getValue();
-            if (value.getUuid()!=null && uuid.toString().equalsIgnoreCase(value.getUuid().toString())) {
+            if (value.getUuid() != null && uuid.toString().equalsIgnoreCase(value.getUuid().toString())) {
                 list.add(key);
             }
         }
         return list;
     }
-    
-    public static void kickOtherWS(Channel channel, UUID uuid){
+
+    public static void kickOtherWS(Channel channel, UUID uuid) {
         List<Channel> oldChannels = WsClientHelper.getChannels(uuid);
         if (!oldChannels.isEmpty()) {
             for (Channel oldChannel : oldChannels) {

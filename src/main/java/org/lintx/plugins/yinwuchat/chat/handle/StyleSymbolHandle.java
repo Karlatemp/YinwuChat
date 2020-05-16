@@ -7,6 +7,6 @@ import org.lintx.plugins.yinwuchat.chat.struct.ChatSource;
 public class StyleSymbolHandle extends ChatHandle {
     @Override
     public void handle(Chat chat) {
-        if (chat.source!= ChatSource.QQ) handle(chat, MessageUtil::replace);
+        if (chat.source != ChatSource.QQ) handle(chat, MessageUtil::replace);
     }
 }

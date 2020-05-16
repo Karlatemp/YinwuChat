@@ -9,10 +9,10 @@ public class StylePermissionHandle extends ChatHandle {
     @Override
     public void handle(Chat chat) {
         Config config = Config.getInstance();
-        if (chat.source== ChatSource.QQ){
-            handle(chat, message -> MessageUtil.filter(message,config.coolQConfig.qqDenyStyle));
-        }else if (chat.source==ChatSource.WEB){
-            handle(chat, message -> MessageUtil.filter(message,config.webDenyStyle));
+        if (chat.source == ChatSource.QQ) {
+            handle(chat, message -> MessageUtil.filter(message, config.coolQConfig.qqDenyStyle));
+        } else if (chat.source == ChatSource.WEB) {
+            handle(chat, message -> MessageUtil.filter(message, config.webDenyStyle));
         }
     }
 }

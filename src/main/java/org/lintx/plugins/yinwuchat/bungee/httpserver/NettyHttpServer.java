@@ -16,9 +16,9 @@ import java.io.File;
 
 public class NettyHttpServer {
     private final int port;
-    private NioEventLoopGroup group;
     private final YinwuChat plugin;
     private final File rootFolder;
+    private NioEventLoopGroup group;
 
     public NettyHttpServer(int port, YinwuChat plugin, File rootFolder) {
         this.port = port;
@@ -26,7 +26,7 @@ public class NettyHttpServer {
         this.rootFolder = rootFolder;
     }
 
-    public void start(){
+    public void start() {
         ServerBootstrap bootstrap = new ServerBootstrap();
         this.group = new NioEventLoopGroup();
         bootstrap.group(group)
@@ -38,7 +38,7 @@ public class NettyHttpServer {
                                 .addLast(new HttpServerCodec())
                                 .addLast(new HttpObjectAggregator(65536))
                                 .addLast(new WebSocketServerCompressionHandler())
-                                .addLast(new WebSocketServerProtocolHandler("/ws",null,true))
+                                .addLast(new WebSocketServerProtocolHandler("/ws", null, true))
                                 .addLast(new NettyWebSocketFrameHandler(plugin))
                                 .addLast(new NettyHttpRequestHandler(rootFolder));
                     }
@@ -48,14 +48,15 @@ public class NettyHttpServer {
             plugin.getLogger().info("Http Server listener on port:" + port);
             ch.closeFuture().sync();
         } catch (InterruptedException ignored) {
-        }finally {
+        } finally {
             group.shutdownGracefully();
         }
     }
 
-    public void stop(){
+    public void stop() {
         try {
             group.shutdownGracefully();
-        }catch (Exception | Error ignored){}
+        } catch (Exception | Error ignored) {
+        }
     }
 }

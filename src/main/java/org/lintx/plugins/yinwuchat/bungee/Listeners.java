@@ -16,20 +16,20 @@ public class Listeners implements Listener {
     private final YinwuChat plugin;
     private Config config = Config.getInstance();
 
-    Listeners(YinwuChat plugin){
+    Listeners(YinwuChat plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
-    public void onPluginMessage(PluginMessageEvent event){
+    public void onPluginMessage(PluginMessageEvent event) {
         plugin.getProxy().getScheduler().runAsync(plugin, new Runnable() {
             @Override
             public void run() {
-                if (event.getTag().equals(Const.PLUGIN_CHANNEL)){
-                    if (event.getReceiver() instanceof ProxiedPlayer && event.getSender() instanceof Server){
-                        ProxiedPlayer player = (ProxiedPlayer)event.getReceiver();
+                if (event.getTag().equals(Const.PLUGIN_CHANNEL)) {
+                    if (event.getReceiver() instanceof ProxiedPlayer && event.getSender() instanceof Server) {
+                        ProxiedPlayer player = (ProxiedPlayer) event.getReceiver();
                         ByteArrayDataInput input = ByteStreams.newDataInput(event.getData());
-                        MessageManage.getInstance().handleBukkitMessage(player,input);
+                        MessageManage.getInstance().handleBukkitMessage(player, input);
                     }
                 }
             }
@@ -37,36 +37,36 @@ public class Listeners implements Listener {
     }
 
     @EventHandler
-    public void onPostLogin(PostLoginEvent event){
+    public void onPostLogin(PostLoginEvent event) {
         if (event.getPlayer() != null) {
             PlayerConfig.getConfig(event.getPlayer());
         }
         OutputPlayerList.sendGamePlayerList();
         MessageManage.getInstance().sendPlayerListToServer();
-        if (config.redisConfig.openRedis){
+        if (config.redisConfig.openRedis) {
             RedisUtil.sendPlayerList();
         }
     }
 
     @EventHandler
-    public void onPlayerDisconnect(PlayerDisconnectEvent event){
+    public void onPlayerDisconnect(PlayerDisconnectEvent event) {
         if (event.getPlayer() != null) {
             PlayerConfig.unloadConfig(event.getPlayer());
         }
         OutputPlayerList.sendGamePlayerList();
         MessageManage.getInstance().sendPlayerListToServer();
-        if (config.redisConfig.openRedis){
+        if (config.redisConfig.openRedis) {
             RedisUtil.sendPlayerList();
         }
     }
 
     @EventHandler
-    public void onServerConnected(ServerConnectedEvent event){
+    public void onServerConnected(ServerConnectedEvent event) {
         MessageManage.getInstance().sendPlayerListToServer(event.getServer());
     }
 
     @EventHandler
-    public void onServerSwitch(ServerSwitchEvent event){
+    public void onServerSwitch(ServerSwitchEvent event) {
         MessageManage.getInstance().sendPlayerListToServer(event.getPlayer().getServer());
     }
 }

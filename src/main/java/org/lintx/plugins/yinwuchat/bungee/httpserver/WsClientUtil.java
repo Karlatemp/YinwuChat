@@ -9,41 +9,40 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 /**
- *
  * @author LinTx
  */
 public class WsClientUtil {
     private UUID uuid = null;
     private String token;
     private LocalDateTime lastDate;
-    
-    private WsClientUtil(String token, UUID uuid){
+
+    private WsClientUtil(String token, UUID uuid) {
         this.token = token;
         this.uuid = uuid;
         this.lastDate = LocalDateTime.MIN;
     }
-    
-    WsClientUtil(String token){
+
+    WsClientUtil(String token) {
         this(token, null);
     }
-    
-    public void setUUID(UUID uuid){
+
+    public void setUUID(UUID uuid) {
         this.uuid = uuid;
     }
-    
-    public UUID getUuid(){
+
+    public UUID getUuid() {
         return uuid;
     }
-    
-    String getToken(){
+
+    String getToken() {
         return token;
     }
-    
-    LocalDateTime getLastDate(){
+
+    LocalDateTime getLastDate() {
         return lastDate;
     }
-    
-    void updateLastDate(){
+
+    void updateLastDate() {
         lastDate = LocalDateTime.now();
     }
 }

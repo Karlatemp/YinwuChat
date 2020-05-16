@@ -13,8 +13,8 @@ public class LinkHandle extends ChatHandle {
         handle(chat, regexp, (matcher) -> {
             String link = matcher.group(0);
             TextComponent component = new TextComponent(MessageUtil.replace(config.tipsConfig.linkText));
-            chat.setHover(component,link);
-            chat.setClick(component,link);
+            chat.setHover(component, link);
+            chat.setClick(component, link);
             return component;
         });
     }

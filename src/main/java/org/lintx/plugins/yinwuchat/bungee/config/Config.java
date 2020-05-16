@@ -15,58 +15,97 @@ import java.util.List;
 public class Config {
     private static int version = 6;
     private static Config instance = new Config();
-    public static Config getInstance(){
+    @YamlConfig
+    public boolean openwsserver = false;
+    @YamlConfig
+    public int wsport = 8888;
+    @YamlConfig
+    public int wsCooldown = 1000;
+    @YamlConfig
+    public String webBATserver = "lobby";
+    @YamlConfig
+    public int atcooldown = 10;
+    @YamlConfig
+    public String atAllKey = "all";
+    @YamlConfig
+    public String linkRegex = "((https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|])";
+    @YamlConfig
+    public List<String> shieldeds = new ArrayList<>();
+    @YamlConfig
+    public int shieldedMode = 1;
+    @YamlConfig
+    public int shieldedKickTime = 60;
+    @YamlConfig
+    public int shieldedKickCount = 3;
+    @YamlConfig
+    public String webDenyStyle = "klmnor";
+    @YamlConfig
+    public boolean allowPlayerFormatPrefixSuffix = true;
+    @YamlConfig
+    public String playerFormatPrefixSuffixDenyStyle = "klmnor";
+    @YamlConfig
+    public TipsConfig tipsConfig = new TipsConfig();
+    @YamlConfig
+    public FormatConfig formatConfig = new FormatConfig();
+    @YamlConfig
+    public CoolQConfig coolQConfig = new CoolQConfig();
+    @YamlConfig
+    public RedisConfig redisConfig = new RedisConfig();
+    @YamlConfig
+    private int configVersion = 0;
+
+    public static Config getInstance() {
         return instance;
     }
 
-    public void load(YinwuChat plugin){
-        Configure.bungeeLoad(plugin,this);
-        if (formatConfig.format==null || formatConfig.format.isEmpty()){
+    public void load(YinwuChat plugin) {
+        Configure.bungeeLoad(plugin, this);
+        if (formatConfig.format == null || formatConfig.format.isEmpty()) {
             formatConfig.format = new ArrayList<>();
-            formatConfig.format.add(new MessageFormat("&b[Web]","点击打开YinwuChat网页","https://chat.yinwurealm.org"));
-            formatConfig.format.add(new MessageFormat("&e{displayName}","点击私聊","/msg {displayName}"));
+            formatConfig.format.add(new MessageFormat("&b[Web]", "点击打开YinwuChat网页", "https://chat.yinwurealm.org"));
+            formatConfig.format.add(new MessageFormat("&e{displayName}", "点击私聊", "/msg {displayName}"));
             formatConfig.format.add(new MessageFormat(" &6>>> "));
             formatConfig.format.add(new MessageFormat("&r{message}"));
         }
-        if (formatConfig.toFormat==null || formatConfig.toFormat.isEmpty()){
+        if (formatConfig.toFormat == null || formatConfig.toFormat.isEmpty()) {
             formatConfig.toFormat = new ArrayList<>();
             formatConfig.toFormat.add(new MessageFormat("&7我 &6-> "));
-            formatConfig.toFormat.add(new MessageFormat("&e{displayName}","点击私聊","/msg {displayName}"));
+            formatConfig.toFormat.add(new MessageFormat("&e{displayName}", "点击私聊", "/msg {displayName}"));
             formatConfig.toFormat.add(new MessageFormat(" &6>>> "));
             formatConfig.toFormat.add(new MessageFormat("&r{message}"));
         }
-        if (formatConfig.monitorFormat==null || formatConfig.monitorFormat.isEmpty()){
+        if (formatConfig.monitorFormat == null || formatConfig.monitorFormat.isEmpty()) {
             formatConfig.monitorFormat = new ArrayList<>();
             formatConfig.monitorFormat.add(new MessageFormat("&7{formPlayer} &6-> "));
             formatConfig.monitorFormat.add(new MessageFormat("&e{toPlayer}"));
             formatConfig.monitorFormat.add(new MessageFormat(" &6>>> "));
             formatConfig.monitorFormat.add(new MessageFormat("&r{message}"));
         }
-        if (formatConfig.fromFormat==null || formatConfig.fromFormat.isEmpty()){
+        if (formatConfig.fromFormat == null || formatConfig.fromFormat.isEmpty()) {
             formatConfig.fromFormat = new ArrayList<>();
-            formatConfig.fromFormat.add(new MessageFormat("&b[Web]","点击打开YinwuChat网页","https://xxxxxx.xxxx.xxx"));
-            formatConfig.fromFormat.add(new MessageFormat("&e{displayName}","点击私聊","/msg {displayName}"));
+            formatConfig.fromFormat.add(new MessageFormat("&b[Web]", "点击打开YinwuChat网页", "https://xxxxxx.xxxx.xxx"));
+            formatConfig.fromFormat.add(new MessageFormat("&e{displayName}", "点击私聊", "/msg {displayName}"));
             formatConfig.fromFormat.add(new MessageFormat(" &6-> &7我"));
             formatConfig.fromFormat.add(new MessageFormat(" &6>>> "));
             formatConfig.fromFormat.add(new MessageFormat("&r{message}"));
         }
-        if (formatConfig.qqFormat==null || formatConfig.qqFormat.isEmpty()){
+        if (formatConfig.qqFormat == null || formatConfig.qqFormat.isEmpty()) {
             formatConfig.qqFormat = new ArrayList<>();
-            formatConfig.qqFormat.add(new MessageFormat("&b[QQ群]","点击加入QQ群xxxxx","https://xxxxxx.xxxx.xxx"));
+            formatConfig.qqFormat.add(new MessageFormat("&b[QQ群]", "点击加入QQ群xxxxx", "https://xxxxxx.xxxx.xxx"));
             formatConfig.qqFormat.add(new MessageFormat("&e{displayName}"));
             formatConfig.qqFormat.add(new MessageFormat(" &6>>> "));
             formatConfig.qqFormat.add(new MessageFormat("&r{message}"));
         }
-        if (configVersion<6){
+        if (configVersion < 6) {
             redisConfig.selfPrefixFormat = new ArrayList<>();
-            redisConfig.selfPrefixFormat.add(new MessageFormat("&8[其他群组]&r","来自其他群组的消息",""));
+            redisConfig.selfPrefixFormat.add(new MessageFormat("&8[其他群组]&r", "来自其他群组的消息", ""));
         }
-        File file = new File(plugin.getDataFolder(),"config.yml");
-        if (!file.exists() || version!=configVersion){
-            if (file.exists()){
-                File bakConfig = new File(plugin.getDataFolder(),"config_v" + configVersion + ".yml");
+        File file = new File(plugin.getDataFolder(), "config.yml");
+        if (!file.exists() || version != configVersion) {
+            if (file.exists()) {
+                File bakConfig = new File(plugin.getDataFolder(), "config_v" + configVersion + ".yml");
                 try {
-                    Files.copy(file.toPath(),bakConfig.toPath());
+                    Files.copy(file.toPath(), bakConfig.toPath());
                 } catch (IOException ignored) {
 
                 }
@@ -76,64 +115,7 @@ public class Config {
         }
     }
 
-    public void save(YinwuChat plugin){
-        Configure.bungeeSave(plugin,this);
+    public void save(YinwuChat plugin) {
+        Configure.bungeeSave(plugin, this);
     }
-
-    @YamlConfig
-    public boolean openwsserver = false;
-
-    @YamlConfig
-    public int wsport = 8888;
-
-    @YamlConfig
-    public int wsCooldown = 1000;
-
-    @YamlConfig
-    public String webBATserver = "lobby";
-
-    @YamlConfig
-    public int atcooldown = 10;
-
-    @YamlConfig
-    public String atAllKey = "all";
-
-    @YamlConfig
-    public String linkRegex = "((https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|])";
-
-    @YamlConfig
-    public List<String> shieldeds = new ArrayList<>();
-
-    @YamlConfig
-    public int shieldedMode = 1;
-
-    @YamlConfig
-    public int shieldedKickTime = 60;
-
-    @YamlConfig
-    public int shieldedKickCount = 3;
-
-    @YamlConfig
-    private int configVersion = 0;
-
-    @YamlConfig
-    public String webDenyStyle = "klmnor";
-
-    @YamlConfig
-    public boolean allowPlayerFormatPrefixSuffix = true;
-
-    @YamlConfig
-    public String playerFormatPrefixSuffixDenyStyle = "klmnor";
-
-    @YamlConfig
-    public TipsConfig tipsConfig = new TipsConfig();
-
-    @YamlConfig
-    public FormatConfig formatConfig = new FormatConfig();
-
-    @YamlConfig
-    public CoolQConfig coolQConfig = new CoolQConfig();
-
-    @YamlConfig
-    public RedisConfig redisConfig = new RedisConfig();
 }

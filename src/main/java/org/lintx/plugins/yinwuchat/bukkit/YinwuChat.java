@@ -20,8 +20,8 @@ public class YinwuChat extends JavaPlugin {
         MessageManage.getInstance().setPlugin(this);
         Listeners listeners = new Listeners(this);
         getServer().getMessenger().registerOutgoingPluginChannel(this, Const.PLUGIN_CHANNEL);
-        getServer().getMessenger().registerIncomingPluginChannel(this,Const.PLUGIN_CHANNEL,listeners);
-        getServer().getPluginManager().registerEvents(listeners,this);
+        getServer().getMessenger().registerIncomingPluginChannel(this, Const.PLUGIN_CHANNEL, listeners);
+        getServer().getPluginManager().registerEvents(listeners, this);
         getCommand("msg").setExecutor(new PrivateMessage(this));
         getCommand("yinwuchat-bukkit").setExecutor(new org.lintx.plugins.yinwuchat.bukkit.commands.YinwuChat(this));
 
@@ -34,13 +34,13 @@ public class YinwuChat extends JavaPlugin {
         getServer().getMessenger().unregisterOutgoingPluginChannel(this);
     }
 
-    private void requirePlayerList(){
+    private void requirePlayerList() {
         Collection<? extends Player> players = getServer().getOnlinePlayers();
-        if (players==null || players.isEmpty() || !players.iterator().hasNext()) return;
+        if (players == null || players.isEmpty() || !players.iterator().hasNext()) return;
         Player player = players.iterator().next();
-        if (player==null) return;
+        if (player == null) return;
         ByteArrayDataOutput output = ByteStreams.newDataOutput();
         output.writeUTF(Const.PLUGIN_SUB_CHANNEL_PLAYER_LIST);
-        player.sendPluginMessage(this,Const.PLUGIN_CHANNEL,output.toByteArray());
+        player.sendPluginMessage(this, Const.PLUGIN_CHANNEL, output.toByteArray());
     }
 }

@@ -9,7 +9,7 @@ import org.lintx.plugins.yinwuchat.chat.struct.ChatSource;
 public class CoolQCodeHandle extends ChatHandle {
     @Override
     public void handle(Chat chat) {
-        if (chat.source!= ChatSource.QQ) return;
+        if (chat.source != ChatSource.QQ) return;
         Config config = Config.getInstance();
         String regexp = "\\[CQ:(.*?),(.*?)]";
         handle(chat, regexp, (matcher) -> {
@@ -17,28 +17,28 @@ public class CoolQCodeHandle extends ChatHandle {
             String ext = matcher.group(2);
 
             TextComponent component = new TextComponent();
-            if (func.equalsIgnoreCase("image")){
+            if (func.equalsIgnoreCase("image")) {
                 component.setText(MessageUtil.replace(config.coolQConfig.qqImageText));
-            }else if (func.equalsIgnoreCase("record")){
+            } else if (func.equalsIgnoreCase("record")) {
                 component.setText(MessageUtil.replace(config.coolQConfig.qqRecordText));
-            }else if (func.equalsIgnoreCase("at")){
-                component.setText(MessageUtil.replace(config.coolQConfig.qqAtText.replaceAll("\\{qq}",ext.replaceAll("qq=",""))));
-            }else if (func.equalsIgnoreCase("share")){
+            } else if (func.equalsIgnoreCase("at")) {
+                component.setText(MessageUtil.replace(config.coolQConfig.qqAtText.replaceAll("\\{qq}", ext.replaceAll("qq=", ""))));
+            } else if (func.equalsIgnoreCase("share")) {
                 String url = "";
                 String[] a = ext.split(",");
                 for (String kv : a) {
-                    String[] b = kv.split("=",2);
-                    if (b.length==2 && b[0].equalsIgnoreCase("url")){
+                    String[] b = kv.split("=", 2);
+                    if (b.length == 2 && b[0].equalsIgnoreCase("url")) {
                         url = b[1];
                         break;
                     }
                 }
                 component.setText(MessageUtil.replace(config.tipsConfig.linkText));
-                if (!"".equals(url)){
-                    chat.setHover(component,url);
-                    chat.setClick(component,url);
+                if (!"".equals(url)) {
+                    chat.setHover(component, url);
+                    chat.setClick(component, url);
                 }
-            }else {
+            } else {
                 return null;
             }
             return component;

@@ -8,64 +8,59 @@ class BatManage {
     private boolean hasBAT;
     private BAT bat;
 
-    BatManage(YinwuChat plugin){
+    BatManage(YinwuChat plugin) {
         this.plugin = plugin;
 
     }
 
-    private void checkBat(){
+    private void checkBat() {
         hasBAT = plugin.getProxy().getPluginManager().getPlugin("BungeeAdminTools") != null;
-        if (hasBAT){
+        if (hasBAT) {
             try {
                 bat = BAT.getInstance();
-                if (bat==null){
+                if (bat == null) {
                     hasBAT = false;
                 }
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 hasBAT = false;
             }
         }
     }
 
-    boolean isBan(ProxiedPlayer player,String server){
+    boolean isBan(ProxiedPlayer player, String server) {
         checkBat();
         if (!hasBAT) return false;
         try {
-            return bat.getModules().getBanModule().isBan(player,server);
-        }
-        catch (Exception e){
+            return bat.getModules().getBanModule().isBan(player, server);
+        } catch (Exception e) {
             return false;
         }
     }
 
-    boolean isBan(String player,String server){
+    boolean isBan(String player, String server) {
         checkBat();
         if (!hasBAT) return false;
         try {
-            return bat.getModules().getBanModule().isBan(player,server);
-        }
-        catch (Exception e){
+            return bat.getModules().getBanModule().isBan(player, server);
+        } catch (Exception e) {
             return false;
         }
     }
 
-    boolean isMute(ProxiedPlayer player,String server){
+    boolean isMute(ProxiedPlayer player, String server) {
         if (!hasBAT) return false;
         try {
-            return bat.getModules().getMuteModule().isMute(player,server) > 0;
-        }
-        catch (Exception e){
+            return bat.getModules().getMuteModule().isMute(player, server) > 0;
+        } catch (Exception e) {
             return false;
         }
     }
 
-    boolean isMute(String player,String server){
+    boolean isMute(String player, String server) {
         if (!hasBAT) return false;
         try {
-            return bat.getModules().getMuteModule().isMute(player,server,true);
-        }
-        catch (Exception e){
+            return bat.getModules().getMuteModule().isMute(player, server, true);
+        } catch (Exception e) {
             return false;
         }
     }

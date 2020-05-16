@@ -4,19 +4,19 @@ import com.google.gson.annotations.SerializedName;
 
 public class InputCoolQ extends InputBase {
     @SerializedName("post_type")
-    private String post_type="";
+    private String post_type = "";
     @SerializedName("message_type")
-    private String message_type="";
+    private String message_type = "";
     @SerializedName("sub_type")
-    private String sub_type="";
+    private String sub_type = "";
     @SerializedName("group_id")
-    private int group_id=0;
+    private int group_id = 0;
     @SerializedName("message")
-    private String message="";
+    private String message = "";
     @SerializedName("raw_message")
-    private String raw_message="";
+    private String raw_message = "";
     @SerializedName("sender")
-    private Sender sender=new Sender();
+    private Sender sender = new Sender();
 
     public String getPost_type() {
         return post_type;
@@ -46,11 +46,11 @@ public class InputCoolQ extends InputBase {
         return sender;
     }
 
-    public static class Sender{
+    public static class Sender {
         @SerializedName("nickname")
-        private String nickname="";
+        private String nickname = "";
         @SerializedName("card")
-        private String card="";
+        private String card = "";
 
         public String getNickname() {
             return nickname;

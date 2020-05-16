@@ -13,17 +13,18 @@ import java.util.List;
 
 public class YinwuChat implements CommandExecutor, TabExecutor {
     private final org.lintx.plugins.yinwuchat.bukkit.YinwuChat plugin;
-    public YinwuChat(org.lintx.plugins.yinwuchat.bukkit.YinwuChat plugin){
+
+    public YinwuChat(org.lintx.plugins.yinwuchat.bukkit.YinwuChat plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String labelName, String[] args) {
-        if (args.length>=1){
+        if (args.length >= 1) {
             String arg1 = args[0];
-            if (arg1.equalsIgnoreCase("reload")){
-                if (commandSender instanceof Player){
-                    if (!commandSender.hasPermission("yinwuchat.reload")){
+            if (arg1.equalsIgnoreCase("reload")) {
+                if (commandSender instanceof Player) {
+                    if (!commandSender.hasPermission("yinwuchat.reload")) {
                         commandSender.sendMessage(ChatColor.RED + "权限不足");
                         return true;
                     }

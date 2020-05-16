@@ -18,13 +18,14 @@ import java.util.List;
 
 public class Listeners implements Listener, PluginMessageListener {
     private final YinwuChat plugin;
-    Listeners(YinwuChat plugin){
+
+    Listeners(YinwuChat plugin) {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR,ignoreCancelled = true)
-    public void onChat(AsyncPlayerChatEvent event){
-        if (event.isAsynchronous() && Config.getInstance().eventDelayTime>0){
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onChat(AsyncPlayerChatEvent event) {
+        if (event.isAsynchronous() && Config.getInstance().eventDelayTime > 0) {
             try {
                 Thread.sleep(Config.getInstance().eventDelayTime);
             } catch (InterruptedException ignored) {
@@ -35,26 +36,26 @@ public class Listeners implements Listener, PluginMessageListener {
         Player player = event.getPlayer();
         String chat = event.getMessage();
 
-        MessageManage.getInstance().onPublicMessage(player,chat);
+        MessageManage.getInstance().onPublicMessage(player, chat);
 
         event.setCancelled(true);
     }
 
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] bytes) {
-        if (!Const.PLUGIN_CHANNEL.equals(channel)){
+        if (!Const.PLUGIN_CHANNEL.equals(channel)) {
             return;
         }
         ByteArrayDataInput input = ByteStreams.newDataInput(bytes);
         String subchannel = input.readUTF();
-        if (Const.PLUGIN_SUB_CHANNEL_AT.equals(subchannel)){
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS,1.0f,1.0f);
-        }
-        else if (Const.PLUGIN_SUB_CHANNEL_PLAYER_LIST.equals(subchannel)){
+        if (Const.PLUGIN_SUB_CHANNEL_AT.equals(subchannel)) {
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0f, 1.0f);
+        } else if (Const.PLUGIN_SUB_CHANNEL_PLAYER_LIST.equals(subchannel)) {
             try {
                 Gson gson = new Gson();
-                plugin.bungeePlayerList = gson.fromJson(input.readUTF(),new TypeToken<List<String>>(){}.getType());
-            }catch (Exception ignored){
+                plugin.bungeePlayerList = gson.fromJson(input.readUTF(), new TypeToken<List<String>>() {
+                }.getType());
+            } catch (Exception ignored) {
 
             }
         }
