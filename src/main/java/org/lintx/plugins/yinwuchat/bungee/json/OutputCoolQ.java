@@ -9,6 +9,7 @@ public class OutputCoolQ {
     private String action = "send_group_msg";
     @SerializedName("params")
     private Params params;
+
     public OutputCoolQ(String message) {
         this.params = new Params(message);
     }
@@ -25,6 +26,7 @@ public class OutputCoolQ {
         private String message = "";
         @SerializedName("auto_escape")
         private boolean auto_escape = true;
+
         Params(String message) {
             this.message = message;
         }

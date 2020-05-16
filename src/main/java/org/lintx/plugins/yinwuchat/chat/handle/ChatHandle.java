@@ -2,6 +2,7 @@ package org.lintx.plugins.yinwuchat.chat.handle;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.intellij.lang.annotations.Language;
 import org.lintx.plugins.yinwuchat.chat.struct.Chat;
 import org.lintx.plugins.yinwuchat.chat.struct.ChatStruct;
 
@@ -10,11 +11,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class ChatHandle {
-    void handle(Chat chat, String regexp, HandleComponentCallback callback) {
+    void handle(Chat chat, @Language("RegExp") String regexp, HandleComponentCallback callback) {
+        Pattern pattern = Pattern.compile(regexp);
         ListIterator<ChatStruct> iterator = chat.chat.listIterator();
         while (iterator.hasNext()) {
             ChatStruct struct = iterator.next();
-            Pattern pattern = Pattern.compile(regexp);
             Matcher matcher = pattern.matcher(struct.chat);
             while (matcher.find()) {
                 String[] splits = struct.chat.split(regexp, 2);

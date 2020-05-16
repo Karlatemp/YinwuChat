@@ -25,8 +25,8 @@ public class YinwuChat extends Plugin {
     private static YinwuChat plugin;
     private static NettyHttpServer server = null;
     private static BatManage batManage;
-    private ScheduledTask scheduledTask;
     private final Config config = Config.getInstance();
+    private ScheduledTask scheduledTask;
 
     public static NettyHttpServer getWSServer() {
         return server;

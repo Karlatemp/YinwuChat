@@ -1,5 +1,6 @@
 package org.lintx.plugins.yinwuchat.chat.handle;
 
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.lintx.plugins.yinwuchat.Util.MessageUtil;
 import org.lintx.plugins.yinwuchat.bungee.config.Config;
@@ -11,8 +12,7 @@ public class CoolQCodeHandle extends ChatHandle {
     public void handle(Chat chat) {
         if (chat.source != ChatSource.QQ) return;
         Config config = Config.getInstance();
-        String regexp = "\\[CQ:(.*?),(.*?)]";
-        handle(chat, regexp, (matcher) -> {
+        handle(chat, "\\[CQ:(.*?),(.*?)]", (matcher) -> {
             String func = matcher.group(1);
             String ext = matcher.group(2);
 
@@ -38,8 +38,12 @@ public class CoolQCodeHandle extends ChatHandle {
                     chat.setHover(component, url);
                     chat.setClick(component, url);
                 }
+            } else if (func.equalsIgnoreCase("rich")) {
+                final TextComponent result = new TextComponent("[Unsupported message]");
+                result.setColor(ChatColor.GRAY);
+                return result;
             } else {
-                return null;
+                return new TextComponent();// Filtered
             }
             return component;
         });

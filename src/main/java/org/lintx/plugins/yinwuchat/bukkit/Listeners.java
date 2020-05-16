@@ -18,9 +18,9 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class Listeners implements Listener, PluginMessageListener {
-    private final YinwuChat plugin;
     private static final Type ListStringType = new TypeToken<List<String>>() {
     }.getType();
+    private final YinwuChat plugin;
 
     Listeners(YinwuChat plugin) {
         this.plugin = plugin;

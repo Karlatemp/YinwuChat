@@ -36,9 +36,9 @@ import java.util.*;
 
 public class MessageManage {
     private static final Config config = Config.getInstance();
+    private static final MessageManage instance = new MessageManage();
+    private static final List<ChatHandle> handles = new ArrayList<>();
     private static YinwuChat plugin;
-    private static MessageManage instance = new MessageManage();
-    private static List<ChatHandle> handles = new ArrayList<>();
 
     static {
 //        handles.add(new EmojiHandle());

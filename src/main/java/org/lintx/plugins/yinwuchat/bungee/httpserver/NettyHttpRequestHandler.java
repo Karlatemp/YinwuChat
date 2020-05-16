@@ -14,11 +14,11 @@ import java.util.Locale;
 import static io.netty.handler.codec.http.HttpResponseStatus.NOT_FOUND;
 
 public class NettyHttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
-    private final File rootFolder;
     private static final AsciiString htmlType = AsciiString.cached("text/html");
     private static final AsciiString jsType = AsciiString.cached("text/javascript");
     private static final AsciiString cssType = AsciiString.cached("text/css");
     private static final AsciiString jpegType = AsciiString.cached("image/jpeg");
+    private final File rootFolder;
 
 
     NettyHttpRequestHandler(File rootFolder) {
