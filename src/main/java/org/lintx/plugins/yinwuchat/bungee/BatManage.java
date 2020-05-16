@@ -21,7 +21,8 @@ class BatManage {
                 if (bat == null) {
                     hasBAT = false;
                 }
-            } catch (Exception e) {
+            } catch (Throwable e) {
+                // NoClassDefFoundError
                 hasBAT = false;
             }
         }

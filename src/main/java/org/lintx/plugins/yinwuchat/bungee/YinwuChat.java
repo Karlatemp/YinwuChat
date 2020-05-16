@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.net.ServerSocket;
 import java.util.Enumeration;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -24,8 +25,8 @@ public class YinwuChat extends Plugin {
     private static YinwuChat plugin;
     private static NettyHttpServer server = null;
     private static BatManage batManage;
-    private ScheduledTask scheduledTask = null;
-    private Config config = Config.getInstance();
+    private ScheduledTask scheduledTask;
+    private final Config config = Config.getInstance();
 
     public static NettyHttpServer getWSServer() {
         return server;
@@ -104,6 +105,7 @@ public class YinwuChat extends Plugin {
     public void onDisable() {
         if (scheduledTask != null) {
             scheduledTask.cancel();
+            scheduledTask = null;
         }
         stopWsServer();
         getProxy().unregisterChannel(Const.PLUGIN_CHANNEL);
@@ -183,32 +185,19 @@ public class YinwuChat extends Plugin {
             if (file.exists()) {
                 return;
             }
-            if (file.getParentFile().isDirectory()) {
+            if (!file.getParentFile().isDirectory()) {
                 file.getParentFile().mkdir();
             }
-            FileOutputStream outputStream = null;
-            InputStream inputStream = null;
-            try {
-                byte[] buffer = new byte[1024];
-                outputStream = new FileOutputStream(file);
-                inputStream = zipFile.getInputStream(entry);
-                int len;
-                while ((len = inputStream.read(buffer)) >= 0) {
-                    outputStream.write(buffer, 0, len);
+            try (FileOutputStream output = new FileOutputStream(file)) {
+                try (InputStream input = zipFile.getInputStream(entry)) {
+                    byte[] buffer = new byte[1024];
+                    int len;
+                    while ((len = input.read(buffer)) >= 0) {
+                        output.write(buffer, 0, len);
+                    }
                 }
-            } catch (IOException ignored) {
-
-            } finally {
-                try {
-                    outputStream.close();
-                } catch (IOException ignored) {
-
-                }
-                try {
-                    inputStream.close();
-                } catch (IOException ignored) {
-
-                }
+            } catch (IOException ioe) {
+                getLogger().log(Level.WARNING, "Failed to store files.", ioe);
             }
         }
     }

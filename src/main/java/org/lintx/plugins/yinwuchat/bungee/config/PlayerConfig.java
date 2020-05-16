@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class PlayerConfig {
-    private static PlayerConfig instance = new PlayerConfig();
-    private static Map<UUID, Player> configs = new HashMap<>();
+    private static final PlayerConfig instance = new PlayerConfig();
+    private static final Map<UUID, Player> configs = new HashMap<>();
     private static Tokens tokens = null;
 
     public static PlayerConfig getInstance() {

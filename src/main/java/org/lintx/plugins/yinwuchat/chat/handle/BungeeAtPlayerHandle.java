@@ -23,7 +23,7 @@ import java.util.Locale;
 
 public class BungeeAtPlayerHandle extends ChatHandle {
     private List<ProxiedPlayer> atPlayers;
-    private Config config = Config.getInstance();
+    private static final Config config = Config.getInstance();
     private boolean isSendPermissionTip;
     private BungeeChatPlayer player;
 

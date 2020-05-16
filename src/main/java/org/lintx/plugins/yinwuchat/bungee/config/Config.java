@@ -13,8 +13,8 @@ import java.util.List;
 
 @YamlConfig
 public class Config {
-    private static int version = 6;
-    private static Config instance = new Config();
+    private static final int version = 6;
+    private static final Config instance = new Config();
     @YamlConfig
     public boolean openwsserver = false;
     @YamlConfig

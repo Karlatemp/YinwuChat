@@ -36,7 +36,7 @@ public class YinwuChat extends JavaPlugin {
 
     private void requirePlayerList() {
         Collection<? extends Player> players = getServer().getOnlinePlayers();
-        if (players == null || players.isEmpty() || !players.iterator().hasNext()) return;
+        if (players.isEmpty() || !players.iterator().hasNext()) return;
         Player player = players.iterator().next();
         if (player == null) return;
         ByteArrayDataOutput output = ByteStreams.newDataOutput();

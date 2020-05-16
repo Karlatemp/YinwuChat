@@ -2,6 +2,7 @@ package org.lintx.plugins.yinwuchat.bungee;
 
 
 import io.netty.channel.Channel;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.lintx.plugins.yinwuchat.bungee.config.Config;
@@ -16,15 +17,14 @@ import java.util.Map;
 
 public class ShieldedManage {
     private static final ShieldedManage instance = new ShieldedManage();
-    private Map<String, Man> users = new HashMap<>();
+    private final Map<String, Man> users = new HashMap<>();
 
     public static ShieldedManage getInstance() {
         return instance;
     }
 
-    private String formatMessage(String string) {
-        string = string.replaceAll("&([0-9a-fklmnor])", "§$1");
-        return string;
+    private String formatMessage(String message) {
+        return ChatColor.translateAlternateColorCodes('&', message);
     }
 
     Result checkShielded(Channel channel, String uuid, String message) {

@@ -147,7 +147,7 @@ public class ReflectionUtil {
      */
     public static Method getMethod(Class<?> clazz, String methodName, Class<?>... params) {
         if (!loadedMethods.containsKey(clazz)) {
-            loadedMethods.put(clazz, new HashMap<String, Method>());
+            loadedMethods.put(clazz, new HashMap<>());
         }
 
         Map<String, Method> methods = loadedMethods.get(clazz);
@@ -165,7 +165,7 @@ public class ReflectionUtil {
             e.printStackTrace();
             methods.put(methodName, null);
             loadedMethods.put(clazz, methods);
-            return null;
+            throw (Error) new NoSuchMethodError("Method not found").initCause(e);
         }
     }
 
@@ -196,7 +196,7 @@ public class ReflectionUtil {
             e.printStackTrace();
             fields.put(fieldName, null);
             loadedFields.put(clazz, fields);
-            return null;
+            throw (Error) new NoSuchFieldError("Field not found").initCause(e);
         }
     }
 }

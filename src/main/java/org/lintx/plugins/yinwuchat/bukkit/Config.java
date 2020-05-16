@@ -11,8 +11,8 @@ import java.util.List;
 
 @YamlConfig
 public class Config {
-    private static int version = 1;
-    private static Config instance = new Config();
+    private static final int version = 1;
+    private static final Config instance = new Config();
     @YamlConfig
     List<MessageFormat> format = null;
     @YamlConfig

@@ -14,7 +14,7 @@ import org.lintx.plugins.yinwuchat.bungee.json.OutputPlayerList;
 
 public class Listeners implements Listener {
     private final YinwuChat plugin;
-    private Config config = Config.getInstance();
+    private final Config config = Config.getInstance();
 
     Listeners(YinwuChat plugin) {
         this.plugin = plugin;

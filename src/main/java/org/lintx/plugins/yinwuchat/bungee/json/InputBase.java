@@ -10,6 +10,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import org.lintx.plugins.yinwuchat.Util.GsonUtil;
 
 import java.lang.reflect.Type;
 
@@ -17,8 +18,7 @@ import java.lang.reflect.Type;
  * @author LinTx
  */
 public class InputBase {
-    private static final Gson gson = new Gson();
-    private static Type InputCQToken = new TypeToken<InputCoolQ>() {
+    private static final Type InputCQToken = new TypeToken<InputCoolQ>() {
     }.getType();
 
     public static InputBase getObject(String json) {
@@ -39,7 +39,7 @@ public class InputBase {
                     JsonElement postTypeElement = object.get("post_type");
                     if (postTypeElement != null) {
                         try {
-                            return gson.fromJson(json, InputCQToken);
+                            return GsonUtil.GSON.fromJson(json, InputCQToken);
                         } catch (Exception ignored) {
                         }
                     }

@@ -21,7 +21,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class Commands extends Command {
-    private YinwuChat plugin;
+    private final YinwuChat plugin;
 
     Commands(YinwuChat plugin, String name) {
         super(name, null, "yw");

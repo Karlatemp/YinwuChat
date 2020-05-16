@@ -11,7 +11,7 @@ import java.util.List;
 
 @YamlConfig(path = "tasks.yml")
 public class Config {
-    private static Config instance = new Config();
+    private static final Config instance = new Config();
     @YamlConfig
     List<TaskConfig> tasks = new ArrayList<>();
 

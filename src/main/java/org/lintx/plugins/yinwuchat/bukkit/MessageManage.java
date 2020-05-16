@@ -2,13 +2,14 @@ package org.lintx.plugins.yinwuchat.bukkit;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.google.gson.Gson;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.lintx.plugins.yinwuchat.Const;
+import org.lintx.plugins.yinwuchat.Util.GsonUtil;
 import org.lintx.plugins.yinwuchat.Util.ItemUtil;
 import org.lintx.plugins.yinwuchat.Util.MessageUtil;
 import org.lintx.plugins.yinwuchat.json.*;
@@ -19,7 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MessageManage {
-    private static MessageManage instance = new MessageManage();
+    private static final MessageManage instance = new MessageManage();
     private YinwuChat plugin;
 
     private MessageManage() {
@@ -35,16 +36,16 @@ public class MessageManage {
 
     private String filterStyle(Player player, String chat) {
         String permissions = "0123456789abcdefklmnor";
-        String deny = "";
+        StringBuilder deny = new StringBuilder();
         for (int i = 0; i < permissions.length(); i++) {
             String p = permissions.substring(i, i + 1);
             String permission = "yinwuchat.style." + p;
             if (!player.hasPermission(permission)) {
-                deny += p;
+                deny.append(p);
             }
         }
-        if (!"".equals(deny)) {
-            return MessageUtil.filter(chat, deny);
+        if (deny.length() > 0) {
+            return MessageUtil.filter(chat, deny.toString());
         }
         return chat;
     }
@@ -91,7 +92,7 @@ public class MessageManage {
     }
 
     private void sendPluginMessage(Player player, String channel, Message message) {
-        String json = new Gson().toJson(message);
+        String json = GsonUtil.GSON.toJson(message);
         ByteArrayDataOutput output = ByteStreams.newDataOutput();
         output.writeUTF(channel);
         output.writeUTF(json);
@@ -148,7 +149,9 @@ public class MessageManage {
             }
             ItemStack itemStack;
             if (index == -1) {
-                itemStack = inventory.getItemInMainHand() == null ? player.getInventory().getItemInOffHand() : player.getInventory().getItemInMainHand();
+                itemStack = inventory.getItemInMainHand().getType() == Material.AIR
+                        ? player.getInventory().getItemInOffHand()
+                        : player.getInventory().getItemInMainHand();
             } else {
                 itemStack = inventory.getItem(index);
             }
