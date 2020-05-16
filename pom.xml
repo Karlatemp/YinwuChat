@@ -86,6 +86,10 @@
 
     <repositories>
         <repository>
+            <id>local-repo</id>
+            <url>${project.baseUri}/localRepo</url>
+        </repository>
+        <repository>
             <id>bungeecord-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
         </repository>
@@ -108,8 +112,7 @@
             <groupId>org.lintx.plugins.modules</groupId>
             <artifactId>Configure</artifactId>
             <version>1.2.3-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/Configure-1.2.3-SNAPSHOT.jar</systemPath>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.md-5</groupId>
@@ -131,7 +134,7 @@
         <dependency>
             <groupId>fr.Alphart</groupId>
             <artifactId>bungeeadmintools</artifactId>
-            <version>1.4.3</version>
+            <version>1.4.3-basics</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/BungeeAdminTools-1.4.3-basics.jar</systemPath>
         </dependency>

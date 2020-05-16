@@ -2,3 +2,5 @@ name: ${artifactId}
 main: org.lintx.plugins.yinwuchat.bungee.YinwuChat
 version: ${version}
 author: LinTx
+depends:
+  - ConfigureCore
