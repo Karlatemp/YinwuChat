@@ -1,0 +1,6 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.lintx.plugins.modules</groupId>
+    <artifactId>Configure</artifactId>
+    <version>1.2.3-SNAPSHOT</version>
+</project>

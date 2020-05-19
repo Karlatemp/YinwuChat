@@ -3,16 +3,21 @@ package org.lintx.plugins.yinwuchat.bukkit;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import com.google.gson.reflect.TypeToken;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.lintx.plugins.yinwuchat.Const;
 import org.lintx.plugins.yinwuchat.Util.GsonUtil;
+import org.lintx.plugins.yinwuchat.chat.RETranslatedC;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -30,7 +35,7 @@ public class Listeners implements Listener, PluginMessageListener {
     public void onChat(AsyncPlayerChatEvent event) {
         if (event.isAsynchronous() && Config.getInstance().eventDelayTime > 0) {
             try {
-                Thread.sleep(Config.getInstance().eventDelayTime);
+                Thread.sleep(Config.getInstance().eventDelayTime); // TODO: ??????
             } catch (InterruptedException ignored) {
 
             }
@@ -59,6 +64,24 @@ public class Listeners implements Listener, PluginMessageListener {
             } catch (Exception ignored) {
 
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void on(PlayerDeathEvent event) {
+        final Player entity = event.getEntity();
+        final Object handle = NMSUtils.CraftPlayer$getHandle.apply(entity);
+        final Object realDeathMessage =
+                NMSUtils.EntityPlayer$getCombatTracker$getDeathMessage.apply(handle);
+        final String realDeathMessage$toString = NMSUtils.IChatBaseComponent$toPlainString.apply(realDeathMessage);
+        if (realDeathMessage$toString.equals(event.getDeathMessage())) {
+            final String deathJson = NMSUtils.IChatBaseComponent$toJson.apply(realDeathMessage);
+            MessageManage.getInstance().onPlayerDeath(entity, deathJson);
+        } else {
+            if (event.getDeathMessage() == null) return;
+            MessageManage.getInstance().onPlayerDeath(entity, ComponentSerializer.toString(TextComponent.fromLegacyText(
+                    event.getDeathMessage()
+            )));
         }
     }
 }

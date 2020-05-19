@@ -7,6 +7,7 @@ package org.lintx.plugins.yinwuchat.bungee.json;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import org.lintx.plugins.yinwuchat.Util.GsonUtil;
 
 import java.util.Date;
 
@@ -48,6 +49,6 @@ public class OutputServerMessage {
         json.addProperty("message", message);
         json.addProperty("time", new Date().getTime());
         json.addProperty("status", status);
-        return new Gson().toJson(json);
+        return GsonUtil.GSON.toJson(json);
     }
 }

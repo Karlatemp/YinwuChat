@@ -3,7 +3,6 @@ package org.lintx.plugins.yinwuchat.bungee;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import io.netty.channel.Channel;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -13,6 +12,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.lintx.plugins.yinwuchat.Const;
+import org.lintx.plugins.yinwuchat.Util.GsonUtil;
 import org.lintx.plugins.yinwuchat.Util.MessageUtil;
 import org.lintx.plugins.yinwuchat.bungee.config.Config;
 import org.lintx.plugins.yinwuchat.bungee.config.PlayerConfig;
@@ -23,16 +23,20 @@ import org.lintx.plugins.yinwuchat.bungee.json.InputCoolQ;
 import org.lintx.plugins.yinwuchat.bungee.json.OutputCoolQ;
 import org.lintx.plugins.yinwuchat.bungee.json.OutputServerMessage;
 import org.lintx.plugins.yinwuchat.bungee.json.RedisMessageType;
+import org.lintx.plugins.yinwuchat.chat.RETranslatedC;
 import org.lintx.plugins.yinwuchat.chat.handle.*;
 import org.lintx.plugins.yinwuchat.chat.struct.BungeeChatPlayer;
 import org.lintx.plugins.yinwuchat.chat.struct.Chat;
 import org.lintx.plugins.yinwuchat.chat.struct.ChatSource;
 import org.lintx.plugins.yinwuchat.chat.struct.ChatStruct;
+import org.lintx.plugins.yinwuchat.json.Message;
 import org.lintx.plugins.yinwuchat.json.MessageFormat;
 import org.lintx.plugins.yinwuchat.json.PrivateMessage;
 import org.lintx.plugins.yinwuchat.json.PublicMessage;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class MessageManage {
     private static final Config config = Config.getInstance();
@@ -107,12 +111,20 @@ public class MessageManage {
     void handleBukkitMessage(ProxiedPlayer player, ByteArrayDataInput input) {
         String subChannel = input.readUTF();
         switch (subChannel) {
+            case Const.PLUGIN_SUB_CHANNEL_PLAYER_DEATH: {
+                String json = input.readUTF();
+                Message msg = GsonUtil.GSON.fromJson(json, Message.class);
+                final Set<UUID> set = msg.items.stream().map(UUID::fromString).collect(Collectors.toSet());
+                TextComponent component = new TextComponent(ComponentSerializer.parse(msg.chat));
+                broadcast(null, component, false, p -> !set.contains(p.getUniqueId()));
+                break;
+            }
             case Const.PLUGIN_SUB_CHANNEL_PUBLIC_MESSAGE: {
                 if (cantMessage(player)) {
                     return;
                 }
                 String json = input.readUTF();
-                PublicMessage publicMessage = new Gson().fromJson(json, PublicMessage.class);
+                PublicMessage publicMessage = GsonUtil.GSON.fromJson(json, PublicMessage.class);
                 if ("".equals(publicMessage.chat)) return;
 
                 BungeeChatPlayer fromPlayer = new BungeeChatPlayer();
@@ -157,7 +169,7 @@ public class MessageManage {
                     return;
                 }
                 String json = input.readUTF();
-                PrivateMessage privateMessage = new Gson().fromJson(json, PrivateMessage.class);
+                PrivateMessage privateMessage = GsonUtil.GSON.fromJson(json, PrivateMessage.class);
                 if ("".equals(privateMessage.chat)) return;
 
                 BungeeChatPlayer fromPlayer = new BungeeChatPlayer();
@@ -572,11 +584,17 @@ public class MessageManage {
 
     //发送广播消息
     private void broadcast(UUID playerUUID, TextComponent component, boolean noqq) {
+        broadcast(playerUUID, component, noqq, null);
+    }
+
+    private void broadcast(UUID playerUUID, TextComponent component, boolean noqq, Predicate<ProxiedPlayer> customFilter) {
         for (ProxiedPlayer p : plugin.getProxy().getPlayers()) {
-            PlayerConfig.Player playerConfig = PlayerConfig.getConfig(p);
-            if (playerUUID != null && !p.getUniqueId().equals(playerUUID) && playerConfig.isIgnore(playerUUID)) {
-                continue;
-            }
+            if (customFilter == null) {
+                PlayerConfig.Player playerConfig = PlayerConfig.getConfig(p);
+                if (playerUUID != null && !p.getUniqueId().equals(playerUUID) && playerConfig.isIgnore(playerUUID)) {
+                    continue;
+                }
+            } else if (!customFilter.test(p)) continue;
             sendBcMessage(p, component);
         }
 
@@ -593,7 +611,7 @@ public class MessageManage {
         if (!noqq && config.coolQConfig.coolQGameToQQ) {
             Channel channel = WsClientHelper.getCoolQ();
             if (channel != null) {
-                String message = component.toPlainText();
+                String message = RETranslatedC.resolve(component).toPlainText();
                 message = message.replaceAll("§([0-9a-fklmnor])", "");
                 try {
                     NettyChannelMessageHelper.send(channel, new OutputCoolQ(message).getJSON());
@@ -610,7 +628,7 @@ public class MessageManage {
         JsonObject webjson = new JsonObject();
         webjson.addProperty("action", "send_message");
         webjson.addProperty("message", webmessage);
-        return new Gson().toJson(webjson);
+        return GsonUtil.GSON.toJson(webjson);
     }
 
     //给一个bc端玩家发送消息
@@ -640,7 +658,7 @@ public class MessageManage {
         if (config.redisConfig.openRedis) {
             list.addAll(RedisUtil.playerList.keySet());
         }
-        String json = new Gson().toJson(list);
+        String json = GsonUtil.GSON.toJson(list);
         ByteArrayDataOutput output = ByteStreams.newDataOutput();
         output.writeUTF(Const.PLUGIN_SUB_CHANNEL_PLAYER_LIST);
         output.writeUTF(json);

@@ -3,11 +3,17 @@ package org.lintx.plugins.yinwuchat.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.lang.invoke.LambdaMetafactory;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public class ReflectionUtil {
     /*
@@ -34,6 +40,23 @@ public class ReflectionUtil {
      * Cache of fields that we've found in particular classes
      */
     private static Map<Class<?>, Map<String, Field>> loadedFields = new HashMap<Class<?>, Map<String, Field>>();
+    private static final MethodHandles.Lookup lookup = MethodHandles.lookup();
+    private static final MethodType type_Function = MethodType.methodType(Function.class);
+    private static final MethodType type_Function_apply = MethodType.methodType(Object.class, Object.class);
+
+    @SuppressWarnings("unchecked")
+    public static <T, R> Function<T, R> bindTo(Class<R> result, Method method) {
+        try {
+            final MethodHandle handle = lookup.unreflect(method);
+            return (Function<T, R>) LambdaMetafactory.metafactory(lookup, "apply",
+                    type_Function,
+                    type_Function_apply, handle, MethodType.methodType(result, handle.type().parameterType(0))).getTarget().invoke();
+        } catch (Error | RuntimeException re) {
+            throw re;
+        } catch (Throwable throwable) {
+            throw new RuntimeException(throwable);
+        }
+    }
 
     /**
      * Gets the version string for NMS & OBC class paths
@@ -198,5 +221,26 @@ public class ReflectionUtil {
             loadedFields.put(clazz, fields);
             throw (Error) new NoSuchFieldError("Field not found").initCause(e);
         }
+    }
+
+    public static Method findMethod(Class<?> klass,
+                                    int requires,
+                                    int excludes,
+                                    Class<?> result,
+                                    Class<?>... params) {
+        int paramsCount = params.length;
+        for (Method m : klass.getMethods()) {
+            if (m.getParameterCount() == paramsCount) {
+                if (m.getReturnType() == result) {
+                    int modifier = m.getModifiers();
+                    if ((modifier & requires) == requires && (modifier & excludes) == 0) {
+                        if (Arrays.equals(m.getParameterTypes(), params)) {
+                            return m;
+                        }
+                    }
+                }
+            }
+        }
+        throw new NoSuchMethodError();
     }
 }

@@ -7,6 +7,7 @@ public class Const {
     public final static String PLUGIN_SUB_CHANNEL_PLAYER_LIST = "org.lintx.plugins.yinwuchat:player_list";
     public final static String PLUGIN_SUB_CHANNEL_MESSAGE = "org.lintx.plugins.yinwuchat:chat";
     public final static String PLUGIN_SUB_CHANNEL_PUBLIC_MESSAGE = "org.lintx.plugins.yinwuchat:chat";
+    public final static String PLUGIN_SUB_CHANNEL_PLAYER_DEATH = "org.lintx.plugins.yinwuchat:death";
     public final static String PLUGIN_SUB_CHANNEL_PRIVATE_MESSAGE = "org.lintx.plugins.yinwuchat:msg";
 
     public final static String PERMISSION_RELOAD = "yinwuchat.reload";

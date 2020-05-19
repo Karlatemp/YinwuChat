@@ -2,6 +2,7 @@ package org.lintx.plugins.yinwuchat.bungee.json;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
+import org.lintx.plugins.yinwuchat.Util.GsonUtil;
 import org.lintx.plugins.yinwuchat.bungee.config.Config;
 
 public class OutputCoolQ {
@@ -15,7 +16,7 @@ public class OutputCoolQ {
     }
 
     public String getJSON() {
-        Gson gson = new Gson();
+        Gson gson = GsonUtil.GSON;
         return gson.toJson(this);
     }
 

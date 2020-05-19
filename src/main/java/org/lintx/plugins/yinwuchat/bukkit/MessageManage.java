@@ -15,9 +15,11 @@ import org.lintx.plugins.yinwuchat.Util.MessageUtil;
 import org.lintx.plugins.yinwuchat.json.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class MessageManage {
     private static final MessageManage instance = new MessageManage();
@@ -69,6 +71,14 @@ public class MessageManage {
 
         privateMessage.items = getMessageItems(chat, player);
         sendPluginMessage(player, Const.PLUGIN_SUB_CHANNEL_PRIVATE_MESSAGE, privateMessage);
+    }
+
+    void onPlayerDeath(Player player, String death) {
+        Message msg = new Message();
+        msg.player = player.getName();
+        msg.chat = death;
+        msg.items = Bukkit.getOnlinePlayers().stream().map(Player::getUniqueId).map(String::valueOf).collect(Collectors.toCollection(LinkedList::new));
+        sendPluginMessage(player, Const.PLUGIN_SUB_CHANNEL_PLAYER_DEATH, msg);
     }
 
     void onPublicMessage(Player player, String chat) {
