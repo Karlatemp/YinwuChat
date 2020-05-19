@@ -3,6 +3,11 @@
 ## 关于本fork
 原 YinwuChat 已经很久没有更新, 于是直接fork自己更新
 
+## 仓库地址
+- [Fork](https://github.com/Karlatemp/YinwuChat-Forked)
+- [无 Fork](https://github.com/Karlatemp/YinwuChat)
+- 两个仓库会同步修改推送, 创建一个新的无fork的仓库的原因是为了能让github搜索到
+
 关于本Fork的修改可见 [ChangeLog](./CHANGELOG.md) 
 
 ### 关于YinwuChat
