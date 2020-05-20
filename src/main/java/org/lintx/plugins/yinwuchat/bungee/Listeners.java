@@ -2,6 +2,7 @@ package org.lintx.plugins.yinwuchat.bungee;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.*;
@@ -58,11 +59,25 @@ public class Listeners implements Listener {
         if (config.redisConfig.openRedis) {
             RedisUtil.sendPlayerList();
         }
+        String playerLeaveMessage = config.playerLeaveMessage;
+        if (playerLeaveMessage != null) {
+            MessageManage.getInstance().broadcast(null,
+                    new TextComponent(
+                            String.format(playerLeaveMessage, event.getPlayer().getName())
+                    ), false, p -> false);
+        }
     }
 
     @EventHandler
     public void onServerConnected(ServerConnectedEvent event) {
         MessageManage.getInstance().sendPlayerListToServer(event.getServer());
+        String playerJoinMessage = config.playerJoinMessage;
+        if (playerJoinMessage != null) {
+            MessageManage.getInstance().broadcast(null,
+                    new TextComponent(
+                            String.format(playerJoinMessage, event.getPlayer().getName())
+                    ), false, p -> false);
+        }
     }
 
     @EventHandler

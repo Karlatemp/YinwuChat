@@ -20,6 +20,7 @@ YinwuChat同时是Bungeecord插件和Spigot插件，主要功能有。
 - 关键词屏蔽
 - 使用酷Q和酷Q HTTP API来实现Q群聊天同步
 - 同步死亡信息到Q群
+- 同步玩家进服退服到Q群
 
 注：你需要在你的Bungee服务端和这个Bungee接入的所有的Spigot服务端都安装这个插件
 

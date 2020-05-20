@@ -13,7 +13,7 @@ import java.util.List;
 
 @YamlConfig
 public class Config {
-    private static final int version = 6;
+    private static final int version = 7;
     private static final Config instance = new Config();
     @YamlConfig
     public boolean openwsserver = false;
@@ -53,6 +53,10 @@ public class Config {
     public RedisConfig redisConfig = new RedisConfig();
     @YamlConfig
     private int configVersion = 0;
+    @YamlConfig
+    public String playerJoinMessage;
+    @YamlConfig
+    public String playerLeaveMessage;
 
     public static Config getInstance() {
         return instance;
@@ -100,6 +104,10 @@ public class Config {
             redisConfig.selfPrefixFormat = new ArrayList<>();
             redisConfig.selfPrefixFormat.add(new MessageFormat("&8[其他群组]&r", "来自其他群组的消息", ""));
         }
+        if (configVersion < 7) {
+            playerJoinMessage = "%s 加入了服务器";
+            playerLeaveMessage = "%s 离开了服务器";
+        }
         File file = new File(plugin.getDataFolder(), "config.yml");
         if (!file.exists() || version != configVersion) {
             if (file.exists()) {
@@ -113,6 +121,10 @@ public class Config {
             configVersion = version;
             save(plugin);
         }
+        if (playerJoinMessage != null && playerJoinMessage.trim().isEmpty())
+            playerJoinMessage = null;
+        if (playerLeaveMessage != null && playerLeaveMessage.trim().isEmpty())
+            playerLeaveMessage = null;
     }
 
     public void save(YinwuChat plugin) {
