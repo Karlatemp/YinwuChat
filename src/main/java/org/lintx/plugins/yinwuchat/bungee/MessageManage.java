@@ -583,11 +583,11 @@ public class MessageManage {
     }
 
     //发送广播消息
-    private void broadcast(UUID playerUUID, TextComponent component, boolean noqq) {
+    public void broadcast(UUID playerUUID, TextComponent component, boolean noqq) {
         broadcast(playerUUID, component, noqq, null);
     }
 
-    private void broadcast(UUID playerUUID, TextComponent component, boolean noqq, Predicate<ProxiedPlayer> customFilter) {
+    public void broadcast(UUID playerUUID, TextComponent component, boolean noqq, Predicate<ProxiedPlayer> customFilter) {
         for (ProxiedPlayer p : plugin.getProxy().getPlayers()) {
             if (customFilter == null) {
                 PlayerConfig.Player playerConfig = PlayerConfig.getConfig(p);
