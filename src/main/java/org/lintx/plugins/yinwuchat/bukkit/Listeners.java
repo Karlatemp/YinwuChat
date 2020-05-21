@@ -3,7 +3,6 @@ package org.lintx.plugins.yinwuchat.bukkit;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 import com.google.gson.reflect.TypeToken;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Sound;
@@ -17,7 +16,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.lintx.plugins.yinwuchat.Const;
 import org.lintx.plugins.yinwuchat.Util.GsonUtil;
-import org.lintx.plugins.yinwuchat.chat.RETranslatedC;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -26,6 +24,7 @@ public class Listeners implements Listener, PluginMessageListener {
     private static final Type ListStringType = new TypeToken<List<String>>() {
     }.getType();
     private final YinwuChat plugin;
+    private static final Config CONFIG = Config.getInstance();
 
     Listeners(YinwuChat plugin) {
         this.plugin = plugin;
@@ -33,7 +32,7 @@ public class Listeners implements Listener, PluginMessageListener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
-        if (event.isAsynchronous() && Config.getInstance().eventDelayTime > 0) {
+        if (event.isAsynchronous() && CONFIG.eventDelayTime > 0) {
             try {
                 Thread.sleep(Config.getInstance().eventDelayTime); // TODO: ??????
             } catch (InterruptedException ignored) {
@@ -69,6 +68,7 @@ public class Listeners implements Listener, PluginMessageListener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void on(PlayerDeathEvent event) {
+        if (!CONFIG.broadcastDeath) return;
         final Player entity = event.getEntity();
         final Object handle = NMSUtils.CraftPlayer$getHandle.apply(entity);
         final Object realDeathMessage =

@@ -11,7 +11,7 @@ import java.util.List;
 
 @YamlConfig
 public class Config {
-    private static final int version = 1;
+    private static final int version = 2;
     private static final Config instance = new Config();
     @YamlConfig
     List<MessageFormat> format = null;
@@ -25,6 +25,8 @@ public class Config {
     List<HandleConfig> messageHandles = null;
     @YamlConfig
     private int configVersion = 0;
+    @YamlConfig
+    public boolean broadcastDeath = true;
 
     private Config() {
 

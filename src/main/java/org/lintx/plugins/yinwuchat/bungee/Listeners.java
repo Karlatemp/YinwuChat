@@ -69,15 +69,21 @@ public class Listeners implements Listener {
     }
 
     @EventHandler
+    public void on(ServerConnectEvent event) {
+        if (event.getReason() == ServerConnectEvent.Reason.JOIN_PROXY) {
+            String playerJoinMessage = config.playerJoinMessage;
+            if (playerJoinMessage != null) {
+                MessageManage.getInstance().broadcast(null,
+                        new TextComponent(
+                                String.format(playerJoinMessage, event.getPlayer().getName())
+                        ), false, p -> false);
+            }
+        }
+    }
+
+    @EventHandler
     public void onServerConnected(ServerConnectedEvent event) {
         MessageManage.getInstance().sendPlayerListToServer(event.getServer());
-        String playerJoinMessage = config.playerJoinMessage;
-        if (playerJoinMessage != null) {
-            MessageManage.getInstance().broadcast(null,
-                    new TextComponent(
-                            String.format(playerJoinMessage, event.getPlayer().getName())
-                    ), false, p -> false);
-        }
     }
 
     @EventHandler

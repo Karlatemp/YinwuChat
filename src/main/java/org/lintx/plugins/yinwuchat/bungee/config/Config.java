@@ -13,7 +13,7 @@ import java.util.List;
 
 @YamlConfig
 public class Config {
-    private static final int version = 7;
+    private static final int version = 8;
     private static final Config instance = new Config();
     @YamlConfig
     public boolean openwsserver = false;
@@ -57,6 +57,8 @@ public class Config {
     public String playerJoinMessage;
     @YamlConfig
     public String playerLeaveMessage;
+    @YamlConfig
+    public DeathConfig deathConfig = new DeathConfig();
 
     public static Config getInstance() {
         return instance;
@@ -107,6 +109,9 @@ public class Config {
         if (configVersion < 7) {
             playerJoinMessage = "%s 加入了服务器";
             playerLeaveMessage = "%s 离开了服务器";
+        }
+        if (deathConfig == null) {
+            deathConfig = new DeathConfig();
         }
         File file = new File(plugin.getDataFolder(), "config.yml");
         if (!file.exists() || version != configVersion) {

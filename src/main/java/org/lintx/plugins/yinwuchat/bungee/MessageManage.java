@@ -112,11 +112,12 @@ public class MessageManage {
         String subChannel = input.readUTF();
         switch (subChannel) {
             case Const.PLUGIN_SUB_CHANNEL_PLAYER_DEATH: {
+                if (!config.deathConfig.enable) break;
                 String json = input.readUTF();
                 Message msg = GsonUtil.GSON.fromJson(json, Message.class);
                 final Set<UUID> set = msg.items.stream().map(UUID::fromString).collect(Collectors.toSet());
                 TextComponent component = new TextComponent(ComponentSerializer.parse(msg.chat));
-                broadcast(null, component, false, p -> !set.contains(p.getUniqueId()));
+                broadcast(null, component, config.deathConfig.noQQBroadcast, p -> !set.contains(p.getUniqueId()));
                 break;
             }
             case Const.PLUGIN_SUB_CHANNEL_PUBLIC_MESSAGE: {
