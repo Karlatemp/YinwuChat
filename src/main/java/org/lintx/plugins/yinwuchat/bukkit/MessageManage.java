@@ -84,7 +84,7 @@ public class MessageManage {
     void onPublicMessage(Player player, String chat) {
         chat = filterStyle(player, chat);
         PublicMessage publicMessage = new PublicMessage();
-        publicMessage.player = player.getName();
+        publicMessage.player = player.getDisplayName();
         publicMessage.chat = chat;
 
         publicMessage.format = format(player, Config.getInstance().format);
