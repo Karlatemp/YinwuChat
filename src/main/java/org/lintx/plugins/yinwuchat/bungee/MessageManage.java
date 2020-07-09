@@ -12,6 +12,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.lintx.plugins.yinwuchat.Const;
+import org.lintx.plugins.yinwuchat.Util.BCCUtils;
 import org.lintx.plugins.yinwuchat.Util.GsonUtil;
 import org.lintx.plugins.yinwuchat.Util.MessageUtil;
 import org.lintx.plugins.yinwuchat.bungee.config.Config;
@@ -94,6 +95,7 @@ public class MessageManage {
         if (items != null) {
             try {
                 for (String s : items) {
+                    System.out.println("ITEM " + s);
                     if (s == null) {
                         list.add(null);
                     } else {
@@ -154,13 +156,14 @@ public class MessageManage {
 
                 Chat chat = new Chat(fromPlayer, list, ChatSource.GAME);
                 chat.extraData = publicMessage.handles;
-                chat.items = getItems(publicMessage.items);
+                // TODO: BUNGEE ISSUE 2898
+                // chat.items = getItems(publicMessage.items);
 
                 for (ChatHandle handle : handles) {
                     handle.handle(chat);
                 }
                 TextComponent messageComponent = chat.buildPublicMessage(publicMessage.format);
-
+                System.out.println(ComponentSerializer.toString(messageComponent));
                 broadcast(player.getUniqueId(), messageComponent, notQQ);
                 plugin.getLogger().info(messageComponent.toPlainText());
                 break;

@@ -1,5 +1,6 @@
 package org.lintx.plugins.yinwuchat.Util;
 
+import com.google.gson.JsonPrimitive;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -104,7 +105,7 @@ public class ItemUtil {
         return component;
     }
 
-    public static BaseComponent componentWithPlayer(ItemStack itemStack) {
+    private static BaseComponent componentWithPlayer(ItemStack itemStack) {
         if (itemStack == null || itemStack.getType().equals(Material.AIR)) {
             return null;
         }
@@ -112,6 +113,7 @@ public class ItemUtil {
         try {
             if (item.getType().equals(Material.WRITABLE_BOOK) || item.getType().equals(Material.WRITTEN_BOOK)) {
                 BookMeta bm = (BookMeta) item.getItemMeta();
+                assert bm != null;
                 bm.setPages(Collections.emptyList());
                 item.setItemMeta(bm);
             }
@@ -127,6 +129,7 @@ public class ItemUtil {
             if (shulker_boxes.contains(item.getType())) {
                 if (item.hasItemMeta()) {
                     BlockStateMeta bsm = (BlockStateMeta) item.getItemMeta();
+                    assert bsm != null;
                     if (bsm.hasBlockState()) {
                         ShulkerBox sb = (ShulkerBox) bsm.getBlockState();
                         for (ItemStack i : sb.getInventory()) {
@@ -141,6 +144,8 @@ public class ItemUtil {
                             }
                             ItemMeta im = Bukkit.getItemFactory().getItemMeta(i.getType());
                             ItemMeta original = i.getItemMeta();
+                            assert original != null;
+                            assert im != null;
                             if (original.hasDisplayName()) {
                                 im.setDisplayName(original.getDisplayName());
                             }

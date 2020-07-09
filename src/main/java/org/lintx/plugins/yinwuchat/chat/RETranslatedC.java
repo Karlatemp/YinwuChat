@@ -23,7 +23,7 @@ public class RETranslatedC {
     private static final Pattern format = Pattern.compile("%(?:(\\d+)\\$)?([A-Za-z%]|$)");
 
     static {
-        final InputStream resource = RETranslatedC.class.getResourceAsStream("/translate.zh_cn.1.15.2.json");
+        final InputStream resource = RETranslatedC.class.getResourceAsStream("/translate.zh_cn.1.16.1.json");
         if (resource == null) throw new ExceptionInInitializerError("Translate resource missing.");
         try (InputStreamReader reader = new InputStreamReader(resource, StandardCharsets.UTF_8)) {
             trans_zh_CN = new JsonParser().parse(reader).getAsJsonObject();

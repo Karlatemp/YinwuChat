@@ -3,10 +3,15 @@ package org.lintx.plugins.yinwuchat.bungee;
 import io.netty.channel.Channel;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.lintx.plugins.yinwuchat.Const;
+import org.lintx.plugins.yinwuchat.Util.BCCUtils;
 import org.lintx.plugins.yinwuchat.Util.MessageUtil;
 import org.lintx.plugins.yinwuchat.bungee.config.Config;
 import org.lintx.plugins.yinwuchat.bungee.config.PlayerConfig;
@@ -57,6 +62,42 @@ public class Commands extends Command {
         if (args.length >= 1) {
             String first = args[0];
             PlayerConfig.Player playerConfig = PlayerConfig.getConfig(player);
+
+            // TODO: REMOVE TESTING CODE
+            //  BUNGEE-ISSUE-2898
+            if (first.equals("test101")) {
+                final BaseComponent[] components = new ComponentBuilder("Test").event(new HoverEvent(
+                        HoverEvent.Action.SHOW_ITEM, new BaseComponent[]{
+                        new TextComponent("{id:\"minecraft:netherrack\",Count:47b}")
+                })).create();
+                player.sendMessage(components);
+                System.out.println(ComponentSerializer.toString(components));
+                // {"text":"Test","hoverEvent":{"action":"show_item","value":[{"text":"{id:\"minecraft:netherrack\",Count:47b}"}]}}
+                return;
+            } else if (first.equals("test102")) {
+                String json = "{\"text\":\"Test\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":[{\"text\":\"{id:\\\"minecraft:netherrack\\\",Count:47b}\"}]}}";
+                final BaseComponent[] components = ComponentSerializer.parse(json);
+                player.sendMessage(components);
+                System.out.println(ComponentSerializer.toString(components));
+                // {"text":"Test","hoverEvent":{"action":"show_item","contents":[{"id":"minecraft:air"}]}}
+                return;
+            } else if (first.equals("test103")) {
+                String json = "{\"text\":\"Test\",\"hoverEvent\":{\"action\":\"show_item\",\"value\":[{\"text\":\"{id:\\\"minecraft:netherrack\\\",Count:47b}\"}]}}";
+                final BaseComponent[] components = ComponentSerializer.parse(json);
+                player.sendMessage(components);
+                for (BaseComponent baseComponent : components) {
+                    if (baseComponent instanceof TextComponent) {
+                        final HoverEvent hoverEvent = baseComponent.getHoverEvent();
+                        if (hoverEvent != null) {
+                            BCCUtils.set(hoverEvent, true);
+                        }
+                    }
+                }
+                System.out.println(ComponentSerializer.toString(components));
+                // {"text":"Test","hoverEvent":{"action":"show_item","value":{"id":"minecraft:air"}}}
+                return;
+            }
+
             if (first.equalsIgnoreCase("badword")) {
                 if (player.hasPermission(Const.PERMISSION_BAD_WORD)) {
                     if (args.length >= 3) {

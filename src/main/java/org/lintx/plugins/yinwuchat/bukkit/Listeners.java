@@ -34,7 +34,7 @@ public class Listeners implements Listener, PluginMessageListener {
     public void onChat(AsyncPlayerChatEvent event) {
         if (event.isAsynchronous() && CONFIG.eventDelayTime > 0) {
             try {
-                Thread.sleep(Config.getInstance().eventDelayTime); // TODO: ??????
+                Thread.sleep(Config.getInstance().eventDelayTime);
             } catch (InterruptedException ignored) {
 
             }

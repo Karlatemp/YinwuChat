@@ -23,18 +23,19 @@ public class Listeners implements Listener {
 
     @EventHandler
     public void onPluginMessage(PluginMessageEvent event) {
-        plugin.getProxy().getScheduler().runAsync(plugin, new Runnable() {
-            @Override
-            public void run() {
-                if (event.getTag().equals(Const.PLUGIN_CHANNEL)) {
+        event.setCancelled(true);
+        if (event.getTag().equals(Const.PLUGIN_CHANNEL)) {
+            plugin.getProxy().getScheduler().runAsync(plugin, new Runnable() {
+                @Override
+                public void run() {
                     if (event.getReceiver() instanceof ProxiedPlayer && event.getSender() instanceof Server) {
                         ProxiedPlayer player = (ProxiedPlayer) event.getReceiver();
                         ByteArrayDataInput input = ByteStreams.newDataInput(event.getData());
                         MessageManage.getInstance().handleBukkitMessage(player, input);
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     @EventHandler
