@@ -95,7 +95,6 @@ public class MessageManage {
         if (items != null) {
             try {
                 for (String s : items) {
-                    System.out.println("ITEM " + s);
                     if (s == null) {
                         list.add(null);
                     } else {
@@ -163,7 +162,6 @@ public class MessageManage {
                     handle.handle(chat);
                 }
                 TextComponent messageComponent = chat.buildPublicMessage(publicMessage.format);
-                System.out.println(ComponentSerializer.toString(messageComponent));
                 broadcast(player.getUniqueId(), messageComponent, notQQ);
                 plugin.getLogger().info(messageComponent.toPlainText());
                 break;

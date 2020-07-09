@@ -107,7 +107,6 @@ public class BungeeAtPlayerHandle extends ChatHandle {
     private void atOne(Chat chat) {
         String regexp = "@(\\w*?)(?=\\W|$)";
         handle(chat, regexp, (matcher) -> {
-            System.out.println(matcher.group(0));
             ProxiedPlayer atPlayer = null;
             ProxiedPlayer findPlayer = null;
             String str = matcher.group(1).toLowerCase(Locale.ROOT);
