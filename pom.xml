@@ -6,7 +6,7 @@
 
     <groupId>org.lintx.plugins.yinwuchat</groupId>
     <artifactId>YinwuChat</artifactId>
-    <version>2.12.3-Dev</version>
+    <version>2.12.3-RC</version>
 
     <build>
         <plugins>

@@ -155,8 +155,7 @@ public class MessageManage {
 
                 Chat chat = new Chat(fromPlayer, list, ChatSource.GAME);
                 chat.extraData = publicMessage.handles;
-                // TODO: BUNGEE ISSUE 2898
-                // chat.items = getItems(publicMessage.items);
+                chat.items = getItems(publicMessage.items);
 
                 for (ChatHandle handle : handles) {
                     handle.handle(chat);
